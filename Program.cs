@@ -371,12 +371,12 @@ namespace Veeam_Cred_Extractor
                     dbTypeDict = GetVeeamRegistryValues(dbConfigKey, "DatabaseName");
                     if (dbTypeDict.TryGetValue("DatabaseName", out var veeamOneEnabled))
                     {
-                        Console.WriteLine($"  - VeeamOne database: {veeamOneEnabled}");
+                        Console.WriteLine($"  - Veeam One database: {veeamOneEnabled}");
                     }
                     dbTypeDict = GetVeeamRegistryValues(dbConfigKey, "DatabaseServer");
                     if (dbTypeDict.TryGetValue("DatabaseServer", out var veeamOneServer))
                     {
-                        Console.WriteLine($"  - VeeamOne database server: {veeamOneServer}");
+                        Console.WriteLine($"  - Veeam One database server: {veeamOneServer}");
                     }
 
 
@@ -452,7 +452,7 @@ namespace Veeam_Cred_Extractor
                     }
                     else
                     {
-                        Console.WriteLine("[INFO] VeeamOne info found in Registry:");
+                        Console.WriteLine("[INFO] Veeam One info found in Registry:");
 
                         var dbConfigKey = @"SOFTWARE\\Veeam\Veeam ONE";
                         var dbTypeDict = GetVeeamRegistryValues(dbConfigKey, "DatabaseName");
@@ -495,7 +495,7 @@ namespace Veeam_Cred_Extractor
                     Console.WriteLine($"[INFO] Veeam Backup and Replication Registry Entries Exist: {backupExists}");
 
                     bool oneExists = Registry.LocalMachine.OpenSubKey(veeamOnePath) != null;
-                    Console.WriteLine($"[INFO] VeeamONE Registry Entries Exist: {oneExists}");
+                    Console.WriteLine($"[INFO] Veeam One Registry Entries Exist: {oneExists}");
 
 
                     if (backupExists)
@@ -505,7 +505,7 @@ namespace Veeam_Cred_Extractor
                     }
                     else if (oneExists)
                     {
-                        Console.WriteLine("[INFO] Performing VeeamONE Extraction");
+                        Console.WriteLine("[INFO] Performing Veeam One Extraction");
                         veeamOne = true;
                     }
                     else
@@ -587,7 +587,7 @@ namespace Veeam_Cred_Extractor
                     {
                         InitialiseVeeamEntropy();
 
-                        Console.WriteLine("[INFO] VeeamOne info found in Registry:");
+                        Console.WriteLine("[INFO] Veeam One info found in Registry:");
 
                         var dbConfigKey = @"SOFTWARE\\Veeam\Veeam ONE";
                         var dbTypeDict = GetVeeamRegistryValues(dbConfigKey, "DatabaseName");
@@ -666,12 +666,12 @@ namespace Veeam_Cred_Extractor
                         if (entropyValue != null && entropyValue.Length > 0)
                         {
                             VeeamEntropy = entropyValue;
-                            Console.WriteLine($"[INFO] Loaded VeeamOne Entropy value ({VeeamEntropy.Length} bytes)");
+                            Console.WriteLine($"[INFO] Loaded Veeam One Entropy value ({VeeamEntropy.Length} bytes)");
 
                             if (DEBUG)
                             {
                                 string hex = BitConverter.ToString(VeeamEntropy).Replace("-", "");
-                                Console.WriteLine($"[DEBUG] VeeamOne Entropy value: {hex}");
+                                Console.WriteLine($"[DEBUG] Veeam One Entropy value: {hex}");
                             }
                         }
                         else
@@ -683,7 +683,7 @@ namespace Veeam_Cred_Extractor
                     else
                     {
                         if (DEBUG)
-                            Console.WriteLine("[DEBUG] VeeamOne Private registry key not found");
+                            Console.WriteLine("[DEBUG] Veeam One Private registry key not found");
                     }
                 }
             }
@@ -693,7 +693,7 @@ namespace Veeam_Cred_Extractor
             }
 
             if (DEBUG && VeeamEntropy == null)
-                Console.WriteLine("[DEBUG] Entropy not found, VeeamOne decryption may fail");
+                Console.WriteLine("[DEBUG] Entropy not found, Veeam One decryption may fail");
         }
 
         static Dictionary<string, string> GetVeeamRegistryValues(string subkeyPath, params string[] valueNames)
@@ -1018,7 +1018,7 @@ namespace Veeam_Cred_Extractor
             Console.WriteLine("  -p <psqlPath>    Override path to psql.exe");
             Console.WriteLine("  -l               Enumerate usernames of credentials stored in the database");
             Console.WriteLine("  -u <username>    Decrypt credentials for only a specific user in the database");
-            Console.WriteLine("  -o               Target VeeamOne instead of Veeam Backup and Replication");
+            Console.WriteLine("  -o               Target Veeam One instead of Veeam Backup and Replication");
             Console.WriteLine("  -d               Enable debug output for all steps");
             Console.WriteLine("  -h, --help       Show this help menu");
             Console.WriteLine();
