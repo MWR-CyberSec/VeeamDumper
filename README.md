@@ -145,7 +145,7 @@ VeeamDumper.exe <action> [options]
 |`-p <psqlPath>`|Override psql.exe path|
 |`-l`|List usernames only (no decryption)|
 |`-u <username>`|Extract specific user only|
-|`-o`|Target Veeam ONE instead of VBR|
+|`-o`|Target Veeam One instead of VBR|
 |`-d`|Enable debug output|
 |`-h`, `--help`|Show help menu|
 
