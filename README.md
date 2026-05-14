@@ -78,10 +78,10 @@ The tool supports extracting credentials from both Microsoft SQL Server (MSSQL) 
 
 ## Features
 
-- **ENUM** -- Enumerate the host for information relevant to the tool. This module will identify paths for the `sqlcmd.exe` and `psql.exe` binaries, identify database processes, and perform Windows Registry enumeration for the Veeam installation type and configuration thereof. 
-- **AUTO** -- Automatically performs enumeration to identify the Veeam installation type, database software, and then subsequently decrypts all available credential material stored in the database. 
-- **MSSQL/PSQL** -- Provides a more fine-grained approach to extracting credentials from an MSSQL or PSQL database. These modules provide the ability to list all available users without performing any decryption, as well as target a specific user on which to perform decryption. 
-- **MAP** -- Performs a database query to map the stored credentials, to the hosts where they are used. This provides an indication of where these credentials could be used to gain access to sensitive systems or to perform additional lateral movement. 
+- **ENUM:** Enumerate the host for information relevant to the tool. This module will identify paths for the `sqlcmd.exe` and `psql.exe` binaries, identify database processes, and perform Windows Registry enumeration for the Veeam installation type and configuration thereof. 
+- **AUTO:** Automatically performs enumeration to identify the Veeam installation type, database software, and then subsequently decrypts all available credential material stored in the database. 
+- **MSSQL/PSQL:** Provides a more fine-grained approach to extracting credentials from an MSSQL or PSQL database. These modules provide the ability to list all available users without performing any decryption, as well as target a specific user on which to perform decryption. 
+- **MAP:** Performs a database query to map the stored credentials, to the hosts where they are used. This provides an indication of where these credentials could be used to gain access to sensitive systems or to perform additional lateral movement. 
 
 The following describes at a high-level how the VeeamDumper tooling works:
 
